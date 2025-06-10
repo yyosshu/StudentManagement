@@ -1,5 +1,6 @@
 package raisetech.StudentManagement.controller;
 
+import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -54,16 +55,18 @@ public class StudentController {
   }
 
   @PostMapping("/registerStudent")
-  public String registerStudentPost(@ModelAttribute StudentDetail studentDetail,
+  public String registerStudentPost(
+      @Valid @ModelAttribute StudentDetail studentDetail,
       BindingResult result) {
     if (result.hasErrors()) {
       return "registerStudent";
     }
 
     Student student = studentDetail.getStudent();
-    StudentCourse studentCourse = studentDetail.getStudentCourses().getFirst();
-
+    student.setDeleted(false);
     service.registerStudent(student);
+
+    StudentCourse studentCourse = studentDetail.getStudentCourses().getFirst();
     studentCourse.setStudentId(student.getId());
     service.registerStudentCourse(studentCourse);
 
