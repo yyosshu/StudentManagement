@@ -1,9 +1,5 @@
 package raisetech.StudentManagement.controller;
 
-import java.io.FileDescriptor;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -64,10 +60,12 @@ public class StudentController {
       return "registerStudent";
     }
 
-    System.setOut(
-        new PrintStream(new FileOutputStream(FileDescriptor.out), true, StandardCharsets.UTF_8));
-    System.out.println(
-        studentDetail.getStudent().getName() + "さんが新規受講生として登録されました。");
+    Student student = studentDetail.getStudent();
+    StudentCourse studentCourse = studentDetail.getStudentCourses().getFirst();
+
+    service.registerStudent(student);
+    studentCourse.setStudentId(student.getId());
+    service.registerStudentCourse(studentCourse);
 
     return "redirect:/studentDetailList";
   }
