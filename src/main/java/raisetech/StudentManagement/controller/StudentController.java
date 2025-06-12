@@ -61,15 +61,7 @@ public class StudentController {
     if (result.hasErrors()) {
       return "registerStudent";
     }
-
-    Student student = studentDetail.getStudent();
-    student.setDeleted(false);
-    service.registerStudent(student);
-
-    StudentCourse studentCourse = studentDetail.getStudentCourses().getFirst();
-    studentCourse.setStudentId(student.getId());
-    service.registerStudentCourse(studentCourse);
-
+    service.registerStudentDetail(studentDetail);
     return "redirect:/studentDetailList";
   }
 }
