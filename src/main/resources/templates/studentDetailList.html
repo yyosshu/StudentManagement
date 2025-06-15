@@ -33,14 +33,16 @@
     <th:block th:if="${!#lists.isEmpty(studentDetail.studentCourses)}">
       <th:block th:each="course,iterStat : ${studentDetail.studentCourses}">
         <tr>
-          <!-- 学生情報セルは最初のコース行だけ rowspan -->
           <td th:if="${iterStat.first}"
               th:rowspan="${#lists.size(studentDetail.studentCourses)}"
               th:text="${studentDetail.student.id}">1
           </td>
           <td th:if="${iterStat.first}"
-              th:rowspan="${#lists.size(studentDetail.studentCourses)}"
-              th:text="${studentDetail.student.name}">山田 太郎
+              th:rowspan="${#lists.size(studentDetail.studentCourses)}">
+            <a th:href="@{/updateStudent(studentId=${studentDetail.student.id})}"
+               th:text="${studentDetail.student.name}">
+              山田 太郎
+            </a>
           </td>
           <td th:if="${iterStat.first}"
               th:rowspan="${#lists.size(studentDetail.studentCourses)}"
