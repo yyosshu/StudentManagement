@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Getter
 @Setter
@@ -20,8 +21,10 @@ public class StudentCourse {
   private String courseName;
 
   @FutureOrPresent(message = "現在日時または現在日時より後を指定してください")
+  @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
   private LocalDateTime courseStartDt;
 
   @Future(message = "現在日時より後を指定してください")
+  @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
   private LocalDateTime courseEndDt;
 }

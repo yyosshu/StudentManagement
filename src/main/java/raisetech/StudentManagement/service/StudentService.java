@@ -36,4 +36,20 @@ public class StudentService {
     studentCourse.setStudentId(student.getId());
     repository.registerStudentCourse(studentCourse);
   }
+
+  @Transactional(readOnly = true)
+  public StudentDetail getStudentDetail(int studentId) {
+    StudentDetail studentDetail = new StudentDetail();
+    Student student = repository.searchById(studentId);
+    List<StudentCourse> studentCourses = repository.searchStudentCoursesByStudentId(studentId);
+    studentDetail.setStudent(student);
+    studentDetail.setStudentCourses(studentCourses);
+    return studentDetail;
+  }
+
+  @Transactional
+  public void updateStudentDetail(StudentDetail studentDetail) {
+    repository.updateStudent(studentDetail.getStudent());
+    studentDetail.getStudentCourses().forEach(repository::updateStudentCourse);
+  }
 }
