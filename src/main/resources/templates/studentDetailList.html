@@ -39,7 +39,7 @@
           </td>
           <td th:if="${iterStat.first}"
               th:rowspan="${#lists.size(studentDetail.studentCourses)}">
-            <a th:href="@{/updateStudent(studentId=${studentDetail.student.id})}"
+            <a th:href="@{/updateStudent/{studentId}(studentId=${studentDetail.student.id})}"
                th:text="${studentDetail.student.name}">
               山田 太郎
             </a>
