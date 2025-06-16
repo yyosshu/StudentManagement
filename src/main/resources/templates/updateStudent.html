@@ -100,28 +100,7 @@
            style="color: red;">
       </div>
     </div>
-    <div>
-      <label for="courseStartDt">開始日時：
-        <input type="datetime-local" id="courseStartDt"
-               th:field="*{studentCourses[0].courseStartDt}"/>
-      </label>
-      <div th:if="${#fields.hasErrors('studentCourses[0].courseStartDt')}"
-           th:errors="*{studentCourses[0].courseStartDt}"
-           style="color: red;">
-      </div>
-    </div>
-    <div>
-      <label for="courseEndDt">終了日時：
-        <input type="datetime-local" id="courseEndDt"
-               th:field="*{studentCourses[0].courseEndDt}"/>
-      </label>
-      <div th:if="${#fields.hasErrors('studentCourses[0].courseEndDt')}"
-           th:errors="*{studentCourses[0].courseEndDt}"
-           style="color: red;">
-      </div>
-    </div>
   </fieldset>
-
   <div>
     <button type="submit">更新</button>
   </div>
