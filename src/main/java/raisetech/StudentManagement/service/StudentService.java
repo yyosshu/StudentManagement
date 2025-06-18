@@ -20,7 +20,7 @@ public class StudentService {
   }
 
   public List<Student> searchStudentList() {
-    return repository.search();
+    return repository.searchStudents();
   }
 
   public List<StudentCourse> searchStudentCourseList() {
@@ -40,7 +40,7 @@ public class StudentService {
   @Transactional(readOnly = true)
   public StudentDetail getStudentDetail(int studentId) {
     StudentDetail studentDetail = new StudentDetail();
-    Student student = repository.searchById(studentId);
+    Student student = repository.searchStudent(studentId);
     List<StudentCourse> studentCourses = repository.searchStudentCoursesByStudentId(studentId);
     studentDetail.setStudent(student);
     studentDetail.setStudentCourses(studentCourses);
