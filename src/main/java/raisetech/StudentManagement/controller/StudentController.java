@@ -8,8 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import raisetech.StudentManagement.controller.converter.StudentConverter;
 import raisetech.StudentManagement.data.Student;
 import raisetech.StudentManagement.data.StudentCourse;
@@ -34,11 +34,6 @@ public class StudentController {
     List<StudentCourse> studentCourses = service.searchStudentCourseList();
     model.addAttribute("studentList", converter.convertStudentDetails(students, studentCourses));
     return "studentList";
-  }
-
-  @GetMapping("/studentCourseList")
-  public List<StudentCourse> getStudentCourseList() {
-    return service.searchStudentCourseList();
   }
 
   @GetMapping("/studentDetailList")
@@ -66,8 +61,8 @@ public class StudentController {
     return "redirect:/studentDetailList";
   }
 
-  @GetMapping("/updateStudent")
-  public String updateStudentGet(@RequestParam int studentId, Model model) {
+  @GetMapping("/updateStudent/{studentId}")
+  public String updateStudentGet(@PathVariable int studentId, Model model) {
     StudentDetail studentDetail = service.getStudentDetail(studentId);
     model.addAttribute("studentDetail", studentDetail);
     return "updateStudent";
