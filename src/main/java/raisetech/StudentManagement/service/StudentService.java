@@ -5,11 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import raisetech.StudentManagement.controller.converter.StudentConverter;
 import raisetech.StudentManagement.data.Student;
 import raisetech.StudentManagement.data.StudentCourse;
 import raisetech.StudentManagement.domain.StudentDetail;
 import raisetech.StudentManagement.repository.StudentRepository;
+import raisetech.StudentManagement.service.converter.StudentConverter;
 
 /**
  * 受講生情報を取り扱うサービスです。 受講生の検索や登録、更新処理を行います。
@@ -50,19 +50,31 @@ public class StudentService {
     return new StudentDetail(student, studentCourses);
   }
 
+  /**
+   * 受講生とその受講生に紐づく受講生コース情報を登録します。
+   *
+   * @param studentDetail 登録する受講生詳細
+   * @return 登録された受講生詳細
+   */
   @Transactional
   public StudentDetail registerStudentDetail(StudentDetail studentDetail) {
     Student student = studentDetail.getStudent();
     student.setDeleted(false);
     repository.registerStudent(student);
-    StudentCourse studentCourse = studentDetail.getStudentCourses().getFirst();
-    studentCourse.setStudentId(student.getId());
-    studentCourse.setCourseStartDt(LocalDateTime.now());
-    studentCourse.setCourseEndDt(studentCourse.getCourseStartDt().plusMonths(3));
-    repository.registerStudentCourse(studentCourse);
+    studentDetail.getStudentCourses().forEach(studentCourse -> {
+      studentCourse.setStudentId(student.getId());
+      studentCourse.setCourseStartDt(LocalDateTime.now());
+      studentCourse.setCourseEndDt(studentCourse.getCourseStartDt().plusMonths(3));
+      repository.registerStudentCourse(studentCourse);
+    });
     return studentDetail;
   }
 
+  /**
+   * 受講生とその受講生に紐づく受講生コース情報を更新します。
+   *
+   * @param studentDetail 受講生詳細
+   */
   @Transactional
   public void updateStudentDetail(StudentDetail studentDetail) {
     repository.updateStudent(studentDetail.getStudent());

@@ -45,12 +45,24 @@ public class StudentController {
     return service.searchStudent(id);
   }
 
+  /**
+   * 受講生登録です。受講生詳細の受講生、受講生コース情報を新規登録します。
+   *
+   * @param studentDetail 受講生詳細
+   * @return 登録結果
+   */
   @PostMapping("/registerStudent")
   public ResponseEntity<StudentDetail> registerStudent(@RequestBody StudentDetail studentDetail) {
     StudentDetail responseStudentDetail = service.registerStudentDetail(studentDetail);
     return ResponseEntity.ok(responseStudentDetail);
   }
 
+  /**
+   * 受講生更新です。受講生詳細の受講生、受講生コース情報を更新します。
+   *
+   * @param studentDetail 受講生詳細
+   * @return 更新結果
+   */
   @PostMapping("/updateStudent")
   public ResponseEntity<String> updateStudentPost(@RequestBody StudentDetail studentDetail) {
     service.updateStudentDetail(studentDetail);
