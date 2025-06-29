@@ -1,8 +1,11 @@
 package raisetech.StudentManagement.controller;
 
+import jakarta.validation.Valid;
 import java.util.List;
+import org.hibernate.validator.constraints.Range;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +18,7 @@ import raisetech.StudentManagement.service.StudentService;
 /**
  * 受講生の検索や登録、更新などを行うREST APIとして受け付けるコントローラーです。
  */
+@Validated
 @RestController
 public class StudentController {
 
@@ -42,7 +46,7 @@ public class StudentController {
    * @return 受講生詳細
    */
   @GetMapping("/student/{id}")
-  public StudentDetail getStudent(@PathVariable int id) {
+  public StudentDetail getStudent(@PathVariable @Range(min = 1, max = 999) int id) {
     return service.searchStudent(id);
   }
 
@@ -53,7 +57,8 @@ public class StudentController {
    * @return 登録した受講生詳細
    */
   @PostMapping("/registerStudent")
-  public ResponseEntity<StudentDetail> registerStudent(@RequestBody StudentDetail studentDetail) {
+  public ResponseEntity<StudentDetail> registerStudent(
+      @RequestBody @Valid StudentDetail studentDetail) {
     StudentDetail responseStudentDetail = service.registerStudentDetail(studentDetail);
     return ResponseEntity.ok(responseStudentDetail);
   }
@@ -65,7 +70,7 @@ public class StudentController {
    * @return 更新結果
    */
   @PutMapping("/updateStudent")
-  public ResponseEntity<String> updateStudentPost(@RequestBody StudentDetail studentDetail) {
+  public ResponseEntity<String> updateStudentPost(@RequestBody @Valid StudentDetail studentDetail) {
     service.updateStudentDetail(studentDetail);
     return ResponseEntity.ok("更新処理が成功しました。");
   }
