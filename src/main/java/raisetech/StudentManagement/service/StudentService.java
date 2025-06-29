@@ -27,57 +27,69 @@ public class StudentService {
   }
 
   /**
-   * 受講生一覧検索です。 全件検索を行うので、条件指定は行いません。
+   * 受講生詳細の一覧検索です。 全件検索を行うので、条件指定は行いません。
    *
-   * @return 受講生一覧（全件）
+   * @return 受講生詳細一覧（全件）
    */
   public List<StudentDetail> searchStudentList() {
-    List<Student> studentList = repository.searchStudents();
-    List<StudentCourse> studentCourseList = repository.searchStudentCourses();
+    List<Student> studentList = repository.searchStudentList();
+    List<StudentCourse> studentCourseList = repository.searchStudentCourseList();
     return converter.convertStudentDetails(studentList, studentCourseList);
   }
 
   /**
-   * 受講生検索です。 IDに紐づく受講生を検索した後、その受講生に紐づく受講生コース情報を取得して設定します。
+   * 受講生詳細の検索です。 IDに紐づく受講生を検索した後、その受講生に紐づく受講生コース情報を取得して設定します。
    *
    * @param id 受講生ID
-   * @return 受講生
+   * @return 受講生詳細
    */
   @Transactional(readOnly = true)
   public StudentDetail searchStudent(int id) {
     Student student = repository.searchStudent(id);
-    List<StudentCourse> studentCourses = repository.searchStudentCoursesByStudentId(id);
+    List<StudentCourse> studentCourses = repository.searchStudentCourseListByStudentId(id);
     return new StudentDetail(student, studentCourses);
   }
 
   /**
    * 受講生とその受講生に紐づく受講生コース情報を登録します。
    *
-   * @param studentDetail 登録する受講生詳細
-   * @return 登録された受講生詳細
+   * @param studentDetail 受講生詳細
+   * @return 登録した受講生詳細
    */
   @Transactional
   public StudentDetail registerStudentDetail(StudentDetail studentDetail) {
     Student student = studentDetail.getStudent();
-    student.setDeleted(false);
+
     repository.registerStudent(student);
-    studentDetail.getStudentCourses().forEach(studentCourse -> {
-      studentCourse.setStudentId(student.getId());
-      studentCourse.setCourseStartDt(LocalDateTime.now());
-      studentCourse.setCourseEndDt(studentCourse.getCourseStartDt().plusMonths(3));
+    studentDetail.getStudentCourseList().forEach(studentCourse -> {
+      initStudentCourse(studentCourse, student);
       repository.registerStudentCourse(studentCourse);
     });
     return studentDetail;
   }
 
   /**
-   * 受講生とその受講生に紐づく受講生コース情報を更新します。
+   * 受講生詳細の登録を行います。
+   *
+   * @param studentCourse 受講生コース情報
+   * @param student       受講生
+   */
+  private void initStudentCourse(StudentCourse studentCourse, Student student) {
+    LocalDateTime now = LocalDateTime.now();
+
+    studentCourse.setStudentId(student.getId());
+    studentCourse.setCourseStartDt(now);
+    studentCourse.setCourseEndDt(now.plusMonths(3));
+  }
+
+  /**
+   * 受講生詳細の更新を行います。受講生と受講生コース情報をそれぞれ更新します。
    *
    * @param studentDetail 受講生詳細
    */
   @Transactional
   public void updateStudentDetail(StudentDetail studentDetail) {
     repository.updateStudent(studentDetail.getStudent());
-    studentDetail.getStudentCourses().forEach(repository::updateStudentCourse);
+    studentDetail.getStudentCourseList().forEach(repository::updateStudentCourse);
   }
 }
