@@ -13,32 +13,32 @@ public class Student {
 
   private int id;
 
-  @NotBlank(message = "必須です")
-  @Size(max = 100, message = "{max}文字以内で入力してください")
+  @NotBlank()
+  @Size(max = 100)
   private String name;
 
-  @NotBlank(message = "必須です")
-  @Size(max = 100, message = "{max}文字以内で入力してください")
+  @NotBlank()
+  @Size(max = 100)
   private String kanaName;
 
-  @Size(max = 100, message = "{max}文字以内で入力してください")
+  @Size(max = 100)
   private String nickname;
 
-  @NotBlank(message = "必須です")
-  @Email(message = "メールアドレス形式が不正です")
-  @Size(max = 255, message = "{max}文字以内で入力してください")
+  @NotBlank()
+  @Size(max = 255)
+  @Email()
   private String email;
 
-  @Size(max = 100, message = "{max}文字以内で入力してください")
+  @Size(max = 100)
   private String area;
 
-  @Min(value = 0, message = "{value}以上を入力してください")
+  @Min(value = 18)
   private Integer age;
 
-  @Size(max = 10, message = "{max}文字以内で入力してください")
+  @Size(max = 10)
   private String gender;
 
-  @Size(max = 255, message = "{max}文字以内で入力してください")
+  @Size(max = 255)
   private String remark;
 
   private boolean isDeleted;
